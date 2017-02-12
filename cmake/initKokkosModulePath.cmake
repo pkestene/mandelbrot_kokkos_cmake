@@ -5,7 +5,7 @@
 #    it means we want to use an already installed version of Kokkos.
 #
 # 2. KOKKOS_PATH env variable is NOT defined:
-#    we use
+#    we assume Kokkos has been built earlier using macro buildExternal_Kokkos.cmake
 #
 if(NOT DEFINED ENV{KOKKOS_PATH})
 

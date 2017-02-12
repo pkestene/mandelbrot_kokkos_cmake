@@ -9,9 +9,10 @@ if(BUILD_KOKKOS)
 else()
   project(mandelbrot_kokkos_cmake CXX)
 endif()
-  
 
+#
 # default local cmake macro repository
+#
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
 
@@ -21,7 +22,7 @@ set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 include(${PROJECT_SOURCE_DIR}/cmake/initBuildType.cmake)
 
 #
-# Initialize CMAKE_MODULE_PATH for Kokkos
+# Initialize CMAKE_MODULE_PATH for Kokkos (location of kokkos.cmake)
 #
 include(${PROJECT_SOURCE_DIR}/cmake/initKokkosModulePath.cmake)
 
