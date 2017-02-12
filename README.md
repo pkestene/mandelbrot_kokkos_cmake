@@ -35,4 +35,7 @@ make
 ./src/mandelbrot_kokkos_cuda
 ```
 
+NB
+--
 
+The 2 stage CMakeLists.txt idea is adapted from https://github.com/Sarcasm/cmake-superbuild
