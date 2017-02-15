@@ -10,7 +10,7 @@ How to use it ?
 
 The top-level CMakeLists.txt defines an option: BUILD_KOKKOS
 
-1. If BUILD_KOKKOS is ON, it will first clone kokkos using git (branch develop_cmake from https://github.com/pkestene/kokkos, a small variant of kokkos which generates kokkos.cmake in install dir), build kokkos and then CMakeLists.txt re-invoke itself to build the user application.
+1. If BUILD_KOKKOS is ON, it will first clone kokkos using git (branch develop from https://github.com/kokkos/kokkos, more ecent than Feb. 15th 2017, it will generate fille kokkos.cmake in install dir), build kokkos and then CMakeLists.txt re-invoke itself to build the user application.
 
 ```bash
 mkdir build_with_kokkos_from_git

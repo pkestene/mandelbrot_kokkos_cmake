@@ -19,7 +19,7 @@ string(REPLACE " " ";" KOKKOS_CONFIGURE_LINE_LIST ${KOKKOS_CONFIGURE_LINE})
 list(APPEND DEPENDENCIES kokkos)
 ExternalProject_Add(kokkos
   PREFIX ${CMAKE_BINARY_DIR}/external
-  GIT_REPOSITORY https://github.com/pkestene/kokkos.git
+  GIT_REPOSITORY https://github.com/kokkos/kokkos.git
   GIT_TAG output_kokkos_cmake
   
   CONFIGURE_COMMAND <SOURCE_DIR>/generate_makefile.bash ${KOKKOS_CONFIGURE_LINE_LIST}
