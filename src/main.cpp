@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <cstdlib> // for atoi
 #include <iostream>
 #include <fstream>
 
@@ -57,7 +58,13 @@ int main(int argc, char* argv[]) {
   OpenMPTimer timer;
 #endif
 
-  Constants constants = Constants();
+  int default_size = 8192;
+  if (argc>1)
+    default_size = std::atoi(argv[1]);
+
+  printf("Compute Mandelbrot set of size %dx%d\n",default_size,default_size);
+  
+  Constants constants = Constants(default_size);
 
   // prepare data array for Mandelbrot set computation
   DataArray     image     = DataArray("image", constants.WIDTH,constants.HEIGHT);
