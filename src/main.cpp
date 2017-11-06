@@ -22,17 +22,11 @@ int main(int argc, char* argv[]) {
 
   /*
    * Initialize kokkos (host + device)
+   * 
+   * If CUDA is enabled, Kokkos will try to use the default GPU, i.e. GPU #0 if you
+   * have multiple GPUs.
    */
-#ifdef CUDA
-  // Initialize Host mirror device
-  Kokkos::HostSpace::execution_space::initialize(1);
-  //const unsigned device_count = Kokkos::Cuda::detect_device_count();
-
-  // Use the first device:
-  Kokkos::Cuda::initialize( Kokkos::Cuda::SelectDevice(0) );
-#else // OpenMP CPU
   Kokkos::initialize(argc, argv);
-#endif
 
   {
     std::cout << "##########################\n";
@@ -42,10 +36,10 @@ int main(int argc, char* argv[]) {
     std::ostringstream msg;
     std::cout << "Kokkos configuration" << std::endl;
     if ( Kokkos::hwloc::available() ) {
-      msg << "hwloc( NUMA[" << Kokkos::hwloc::get_available_numa_count()
-          << "] x CORE["    << Kokkos::hwloc::get_available_cores_per_numa()
-          << "] x HT["      << Kokkos::hwloc::get_available_threads_per_core()
-          << "] )"
+      msg << "  hwloc( NUMA[" << Kokkos::hwloc::get_available_numa_count()
+          << "  ] x CORE["    << Kokkos::hwloc::get_available_cores_per_numa()
+          << "  ] x HT["      << Kokkos::hwloc::get_available_threads_per_core()
+          << "  ] )"
           << std::endl ;
     }
 #if defined( CUDA )
@@ -84,11 +78,10 @@ int main(int argc, char* argv[]) {
     Kokkos::Experimental::md_parallel_for(range, functor);
   }
   
-  printf("end of loop reached ...\n");
-
   timer.stop();
-  printf("Time: %lf seconds.\n", timer.elapsed());
-
+  printf("end of mandelbrot loop reached ...\n");
+  printf("Compute time: %lf seconds.\n", timer.elapsed());
+  
   // copy back results from device to host
   Kokkos::deep_copy(imageHost,image);
   
@@ -133,14 +126,9 @@ int main(int argc, char* argv[]) {
 
     fclose(myfile);
   }
-  
-   
-#ifdef CUDA
-  Kokkos::Cuda::finalize();
-  Kokkos::HostSpace::execution_space::finalize();
-#else
+  printf("Compute time: %lf seconds.\n", timer.elapsed());
+     
   Kokkos::finalize();
-#endif
 
   return 0;
 }
