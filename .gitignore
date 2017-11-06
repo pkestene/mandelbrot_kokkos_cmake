@@ -2,3 +2,4 @@
 *.ppm
 mandelbrot.omp
 mandelbrot.cuda
+build_*
