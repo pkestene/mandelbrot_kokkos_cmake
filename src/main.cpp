@@ -85,7 +85,8 @@ int main(int argc, char* argv[]) {
       Kokkos::Experimental::MDRangePolicy< Kokkos::Experimental::Rank<2> ,
 					   Kokkos::IndexType<int> >;
     range2d_t range( {0,0}, {constants.WIDTH,constants.HEIGHT} );
-    Kokkos::Experimental::md_parallel_for(range, functor);
+    //Kokkos::Experimental::md_parallel_for(range, functor);
+    Kokkos::parallel_for(range, functor);
   }
   
   timer.stop();
