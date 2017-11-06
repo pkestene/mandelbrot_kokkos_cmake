@@ -25,11 +25,6 @@ include(${PROJECT_SOURCE_DIR}/cmake/preventBuildInSource.cmake)
 include(${PROJECT_SOURCE_DIR}/cmake/initBuildType.cmake)
 
 #
-# Initialize CMAKE_MODULE_PATH for Kokkos (location of kokkos.cmake)
-#
-include(${PROJECT_SOURCE_DIR}/cmake/initKokkosModulePath.cmake)
-
-#
 # common flags
 #
 if (KOKKOS_ENABLE_CUDA)

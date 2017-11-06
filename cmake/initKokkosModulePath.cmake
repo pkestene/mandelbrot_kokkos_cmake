@@ -1,4 +1,9 @@
 #
+# Deprecated. No need to have KOKKOS_PATH env variable defined. Kokkos is
+# now built as part of the application (with the same flags).
+#
+
+#
 # Here we decide to build kokkos or use an installed version of Kokkos.
 #
 # 1. KOKKOS_PATH env variable is defined:
