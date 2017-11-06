@@ -15,6 +15,7 @@
 #include "OpenMPTimer.h"
 #endif
 
+#include "write_screen.h"
 #include "write_ppm.h"
 
 #include <unistd.h>
@@ -93,26 +94,9 @@ int main(int argc, char* argv[]) {
   
   // copy back results from device to host
   Kokkos::deep_copy(imageHost,image);
-  
-  // print aesthetically, dont read this part
-  int xmax=80;
-  int ymax=60;
-  for(int y=0;y<ymax;y++) {
-    printf("\n");
-    for(int x=0;x<xmax;x++) {
 
-      int val = imageHost(y*constants.HEIGHT/ymax,x*constants.WIDTH/xmax);
-      
-      if (val==200) printf("&");
-      else if (val==42) printf("X");
-      else if(val>64) printf("#");
-      else if(val>32) printf(":");
-      else if(val>8) printf(".");
-      else printf(" ");
-    }
-  }
-  
-  printf("\n");
+
+  write_screen(imageHost, constants);
 
   // save color ppm file
   if (0) {

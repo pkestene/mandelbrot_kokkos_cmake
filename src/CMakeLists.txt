@@ -18,6 +18,8 @@ add_executable(${EXE_NAME}
   CudaTimer.h
   write_ppm.h
   write_ppm.cpp
+  write_screen.h
+  write_screen.cpp
   kokkos_shared.h
   mandelbrot.h
   )
