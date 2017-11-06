@@ -1,3 +1,11 @@
+#
+# This file is deprecated; the recommended way of integrating kokkos
+# into a cmake projet is just to setup kokkos as a git submodule, and add
+# add_subdirectory(kokkos) in the top level CMakeLists.txt
+#
+# PK (Nov 2017)
+#
+
 # allow a possible build of kokkos as an external project
 include(ExternalProject)
 

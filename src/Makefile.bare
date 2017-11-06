@@ -1,3 +1,8 @@
+#
+# Don't use this makefile (deprecated); just read top level README.md and
+# use cmake
+#
+
 # KOKKOS setup (OpenMP or CUDA backend)
 # here we assume KOKKOS_PATH is setup by "module load kokkos"
 KOKKOS_PATH ?= .
