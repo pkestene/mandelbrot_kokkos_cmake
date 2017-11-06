@@ -15,6 +15,8 @@
 #include "OpenMPTimer.h"
 #endif
 
+#include "write_ppm.h"
+
 #include <unistd.h>
 
 using namespace std;
@@ -114,24 +116,8 @@ int main(int argc, char* argv[]) {
 
   // save color ppm file
   if (0) {
-    FILE* myfile = fopen("mandelbrot.ppm","w");
-    
-    fprintf(myfile, "P6 %d %d 255\n", constants.WIDTH , constants.HEIGHT);
-    for(unsigned int i=0; i<constants.WIDTH; ++i) {
-      for(unsigned int j=0; j<constants.HEIGHT; ++j) {
-	
-	unsigned char data;
-	// create an arbitrary RBG code mapping values taken by imageHost
-	data = imageHost(i,j) % 4 * 64;
-	fwrite(&data,1,1,myfile);
-	data = imageHost(i,j) % 8 * 32;
-	fwrite(&data,1,1,myfile);
-	data = imageHost(i,j) % 16 * 16;
-	fwrite(&data,1,1,myfile);
-      }
-    }
-
-    fclose(myfile);
+    std::string filename("mandelbrot.ppm");
+    save_ppm(imageHost, filename, constants);
   }
   printf("Compute time: %lf seconds.\n", timer.elapsed());
      

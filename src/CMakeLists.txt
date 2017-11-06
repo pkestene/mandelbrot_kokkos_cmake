@@ -16,6 +16,8 @@ add_executable(${EXE_NAME}
   OpenMPTimer.h
   constants.h
   CudaTimer.h
+  write_ppm.h
+  write_ppm.cpp
   kokkos_shared.h
   mandelbrot.h
   )
