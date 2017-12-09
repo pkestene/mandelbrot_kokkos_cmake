@@ -27,10 +27,6 @@ include(${PROJECT_SOURCE_DIR}/cmake/initBuildType.cmake)
 #
 # common flags
 #
-if (KOKKOS_ENABLE_CUDA)
-  set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -DCUDA" )
-endif()
-
 if (USE_DOUBLE)
   set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DUSE_DOUBLE" )
 endif()

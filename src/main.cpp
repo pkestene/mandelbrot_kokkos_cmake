@@ -9,7 +9,7 @@
 #include "kokkos_shared.h"
 #include "mandelbrot.h"
 
-#ifdef CUDA
+#ifdef KOKKOS_ENABLE_CUDA
 #include "CudaTimer.h"
 #else // OpenMP
 #include "OpenMPTimer.h"
@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
     std::cout << "##########################\n";
   }
 
-#ifdef CUDA
+#ifdef KOKKOS_ENABLE_CUDA
   CudaTimer timer;
 #else
   OpenMPTimer timer;
