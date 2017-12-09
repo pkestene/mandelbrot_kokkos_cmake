@@ -10,10 +10,8 @@ else()
   set(EXE_NAME "mandelbrot_kokkos_openmp")
 endif()
 
-add_executable(${EXE_NAME}
+set (EXE_NAME_SRC
   main.cpp
-  OpenMPTimer.cpp
-  OpenMPTimer.h
   constants.h
   CudaTimer.h
   write_ppm.h
@@ -23,6 +21,16 @@ add_executable(${EXE_NAME}
   kokkos_shared.h
   mandelbrot.h
   )
+
+if (KOKKOS_ENABLE_OPENMP)
+  set (EXE_NAME_SRC
+    ${EXE_NAME_SRC}
+    OpenMPTimer.cpp
+    OpenMPTimer.h)
+endif()
+
+add_executable(${EXE_NAME}
+  ${EXE_NAME_SRC})
 
 target_link_libraries(${EXE_NAME} kokkos)
 if (KOKKOS_ENABLE_HWLOC)

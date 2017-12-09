@@ -5,22 +5,10 @@
 #include <Kokkos_Parallel.hpp>
 #include <Kokkos_View.hpp>
 
-
-#ifdef CUDA
-# define DEVICE Kokkos::Cuda
-#include <cuda.h>
-#endif
-
-#ifdef OPENMP
-# define DEVICE Kokkos::OpenMP
-#endif
-
-#ifndef DEVICE
-# define DEVICE Kokkos::OpenMP
-#endif
+using Device = Kokkos::DefaultExecutionSpace;
 
 // Data array for image
-typedef Kokkos::View<unsigned char**, DEVICE> DataArray;
+typedef Kokkos::View<unsigned char**, Device> DataArray;
 
 // host mirror
 typedef DataArray::HostMirror                 DataArrayHost;
@@ -34,7 +22,7 @@ typedef DataArray::HostMirror                 DataArrayHost;
  */
 KOKKOS_INLINE_FUNCTION
 void index2coord(int index, int &i, int &j, int Nx, int Ny) {
-#ifdef CUDA
+#ifdef KOKKOS_ENABLE_CUDA
   j = index / Nx;
   i = index - j*Nx;
 #else
@@ -45,7 +33,7 @@ void index2coord(int index, int &i, int &j, int Nx, int Ny) {
 
 KOKKOS_INLINE_FUNCTION
 int coord2index(int i, int j, int Nx, int Ny) {
-#ifdef CUDA
+#ifdef KOKKOS_ENABLE_CUDA
   return i + Nx*j; // left layout
 #else
   return j + Ny*i; // right layout

@@ -37,7 +37,7 @@ How to build ?
 ```bash
 mkdir build_openmp
 cd build_openmp
-CXX=YOUR_COMPILER_HERE cmake ..
+CXX=YOUR_COMPILER_HERE cmake -DKOKKOS_ENABLE_OPENMP ..
 make
 # then you can run the application
 ./src/mandelbrot_kokkos_openmp
@@ -53,10 +53,10 @@ You NEED to use nvcc_wrapper as the CXX compiler. nvcc_wrapper is located in kok
 mkdir build_cuda
 cd build_cuda
 export CXX=/path/to/kokkos/bin/nvcc_wrapper
-ccmake -DKOKKOS_ENABLE_CUDA=ON -DKOKKOS_GPU_ARCH=Maxwell50 ..
+cmake -DKOKKOS_ENABLE_CUDA=ON -DKOKKOS_ARCH=Maxwell50 ..
 make
 # then you can run the application as before
 ./src/mandelbrot_kokkos_cuda
 ```
 
-Of course, you will need to adapt variable KOKKOS_GPU_ARCH to your actual GPU architecture (use cuda sample device_query to probe the architecture).
+Of course, you will need to adapt variable KOKKOS_ARCH to your actual GPU architecture (use cuda sample device_query to probe the architecture).
