@@ -37,7 +37,7 @@ How to build ?
 ```bash
 mkdir build_openmp
 cd build_openmp
-CXX=YOUR_COMPILER_HERE cmake -DKOKKOS_ENABLE_OPENMP ..
+CXX=YOUR_COMPILER_HERE cmake -DKOKKOS_ENABLE_OPENMP=ON ..
 make
 # then you can run the application
 ./src/mandelbrot_kokkos_openmp
