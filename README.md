@@ -37,13 +37,13 @@ How to build ?
 ```bash
 mkdir build_openmp
 cd build_openmp
-CXX=YOUR_COMPILER_HERE cmake -DKOKKOS_ENABLE_OPENMP=ON ..
+CXX=YOUR_COMPILER_HERE cmake -DKokkos_ENABLE_OPENMP=ON ..
 make
 # then you can run the application
 ./src/mandelbrot_kokkos_openmp
 ```
 
-Optionnally you can enable HWLOC by passing -DKOKKOS_ENABLE_HWLOC=ON on cmake's command line (or in ccmake curse gui).
+Optionnally you can enable HWLOC by passing -DKokkos_ENABLE_HWLOC=ON on cmake's command line (or in ccmake curse gui).
 
 2. Build with target device CUDA
 
@@ -53,10 +53,10 @@ You NEED to use nvcc_wrapper as the CXX compiler. nvcc_wrapper is located in kok
 mkdir build_cuda
 cd build_cuda
 export CXX=/path/to/kokkos/bin/nvcc_wrapper
-cmake -DKOKKOS_ENABLE_CUDA=ON -DKOKKOS_ARCH=Maxwell50 ..
+cmake -DKokkos_ENABLE_CUDA=ON -DKokkos_ARCH=Maxwell50 ..
 make
 # then you can run the application as before
 ./src/mandelbrot_kokkos_cuda
 ```
 
-Of course, you will need to adapt variable KOKKOS_ARCH to your actual GPU architecture (use cuda sample device_query to probe the architecture).
+Of course, you will need to adapt variable Kokkos_ARCH to your actual GPU architecture (use cuda sample device_query to probe the architecture).

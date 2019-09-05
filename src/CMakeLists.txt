@@ -4,7 +4,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 #
 # mandelbrot_kokkos executable
 #
-if (KOKKOS_ENABLE_CUDA)
+if (Kokkos_ENABLE_CUDA)
   set(EXE_NAME "mandelbrot_kokkos_cuda")
 else()
   set(EXE_NAME "mandelbrot_kokkos_openmp")
@@ -22,7 +22,7 @@ set (EXE_NAME_SRC
   mandelbrot.h
   )
 
-if (KOKKOS_ENABLE_OPENMP)
+if (Kokkos_ENABLE_OPENMP)
   set (EXE_NAME_SRC
     ${EXE_NAME_SRC}
     OpenMPTimer.cpp
@@ -33,7 +33,7 @@ add_executable(${EXE_NAME}
   ${EXE_NAME_SRC})
 
 target_link_libraries(${EXE_NAME} kokkos)
-if (KOKKOS_ENABLE_HWLOC)
+if (Kokkos_ENABLE_HWLOC)
   target_link_libraries(${EXE_NAME} hwloc)
 endif()
   
