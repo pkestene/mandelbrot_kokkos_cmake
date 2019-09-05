@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.10)
 
 project(mandelbrot_kokkos_cmake CXX)
 
@@ -35,7 +35,7 @@ endif()
 # sources
 #
 
-# first buid kokkos
+# first build kokkos
 add_subdirectory(external/kokkos)
 
 # pass Kokkos include directories to our target application
