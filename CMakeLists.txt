@@ -1,9 +1,12 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.18)
 
 project(mandelbrot_kokkos_cmake CXX)
 
-# C++11 is for Kokkos
-set(CMAKE_CXX_STANDARD 11)
+# always export compile commands database
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# C++17 is for Kokkos (version >= 4.0.00)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 #
@@ -17,12 +20,12 @@ set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 # e.g. mkdir build_openmp for openmp build
 #  or  mkdir build_cuda for cuda build
 #
-include(${PROJECT_SOURCE_DIR}/cmake/preventBuildInSource.cmake)
+include(cmake/preventBuildInSource.cmake)
 
 #
 # Init build type: Release, Debug, ...
 #
-include(${PROJECT_SOURCE_DIR}/cmake/initBuildType.cmake)
+include(cmake/initBuildType.cmake)
 
 #
 # common flags
@@ -32,30 +35,74 @@ if (USE_DOUBLE)
 endif()
 
 #
+# dependencies : kokkos
+#
+include(cmake/build_or_find_kokkos.cmake)
+
+#
 # sources
 #
-
-# first build kokkos
-add_subdirectory(external/kokkos)
-
-# pass Kokkos include directories to our target application
-include_directories(${Kokkos_INCLUDE_DIRS_RET})
-
 add_subdirectory(src)
 
 ##################### PRINT CONFIGURE STATUS ######################
 message("//===================================================")
-message("  ${PROJECT_NAME} build configuration:")
+message("// ${PROJECT_NAME} build configuration:")
 message("//===================================================")
+message("")
+message("  CMake version          : ${CMAKE_VERSION}")
+if (NOT CMAKE_BUILD_TYPE)
+  message("  CMake build type       : NOT SET !")
+else()
+  message("  CMake build type       : ${CMAKE_BUILD_TYPE}")
+endif()
+message("  CMake install prefix   : ${CMAKE_INSTALL_PREFIX}")
+message("  CMake system processor : ${CMAKE_SYSTEM_PROCESSOR}")
+message("  CMake system name (OS) : ${CMAKE_SYSTEM_NAME}")
+message("")
 message("  C++ Compiler : ${CMAKE_CXX_COMPILER_ID} "
-                         "${CMAKE_CXX_COMPILER_VERSION} " 
+                         "${CMAKE_CXX_COMPILER_VERSION} "
                          "${CMAKE_CXX_COMPILER_WRAPPER}")
 message("                 ${CMAKE_CXX_COMPILER}")
-message("  Kokkos OpenMP enabled : ${Kokkos_ENABLE_OPENMP}")
-message("  Kokkos CUDA   enabled : ${Kokkos_ENABLE_CUDA}")
-if (Kokkos_ENABLE_CUDA)
-  message("  Kokkos CUDA   Lambda  : ${Kokkos_ENABLE_CUDA_LAMBDA}")
-  message("  Kokkos CUDA   flags   : ${KOKKOS_CUDA_OPTIONS}")
-endif(Kokkos_ENABLE_CUDA)
-message("  Kokkos HWLOC  enabled : ${Kokkos_ENABLE_HWLOC}")
+message("")
+if(Kokkos_ENABLE_OPENMP)
+  message("  Kokkos_ENABLE_OPENMP         = ${Kokkos_ENABLE_OPENMP}")
+endif()
 
+if(Kokkos_ENABLE_CUDA)
+  message("  Kokkos_ENABLE_CUDA           = ${Kokkos_ENABLE_CUDA}")
+
+  if( (${Kokkos_CUDA_LAMBDA_ENABLED}) OR (${Kokkos_ENABLE_CUDA_LAMBDA}))
+    message("  Kokkos_ENABLE_CUDA_LAMBDA    = ON")
+  else()
+    message("  Kokkos_ENABLE_CUDA_LAMBDA    = OFF")
+  endif()
+
+  if( (${Kokkos_CUDA_CONSTEXPR_ENABLED}) OR (${Kokkos_ENABLE_CUDA_CONSTEXPR}))
+    message("  Kokkos_ENABLE_CUDA_CONSTEXPR = ON")
+  else()
+    message("  Kokkos_ENABLE_CUDA_CONSTEXPR = OFF")
+  endif()
+
+  if( (${Kokkos_CUDA_UVM_ENABLED}) OR (${Kokkos_ENABLE_CUDA_UVM}))
+    message("  Kokkos_ENABLE_CUDA_UVM       = ON")
+  else()
+    message("  Kokkos_ENABLE_CUDA_UVM       = OFF")
+  endif()
+
+  message("  Kokkos CUDA   flags          = ${KOKKOS_CUDA_OPTIONS}")
+  #message("  CUDA Compiler      : ${CMAKE_CUDA_COMPILER}")
+  #message("  CUDA Compiler exec : ${CUDA_NVCC_EXECUTABLE}")
+  #message("  CUDA Compile flags : ${CUDA_NVCC_FLAGS}")
+endif(Kokkos_ENABLE_CUDA)
+
+if(Kokkos_ENABLE_HIP)
+  message("  Kokkos_ENABLE_HIP            = ${Kokkos_ENABLE_HIP}")
+endif(Kokkos_ENABLE_HIP)
+
+if ( (${Kokkos_TPLS_HWLOC_ENABLED}) OR (${Kokkos_ENABLE_HWLOC}) )
+  message("  Kokkos_ENABLE_HWLOC          = ON")
+else()
+  message("  Kokkos_ENABLE_HWLOC          = OFF")
+endif()
+
+message("  Kokkos architecture          = ${Kokkos_ARCH}")

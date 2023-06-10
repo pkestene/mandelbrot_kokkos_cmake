@@ -1,62 +1,48 @@
-Mandelbrot_kokkos_cmake
-=======================
+# Mandelbrot_kokkos_cmake
 
 This is a simple example to illustrate one possible way to use
 [Kokkos](https://github.com/kokkos/kokkos) inside an application
 built with [CMake](https://cmake.org/)
 
-Download / clone sources
-------------------------
+## Download / clone sources
 
-Please note that in this application kokkos is used as a git submodule. As such kokkos
-will be built by the top level cmake using the provided architecture information.
+Please note that, in this application, kokkos library is required.
+- if kokkos is already available, you just need to set `CMAKE_PREFIX_PATH` to point to its installation path
+- if kokkos is not availalble on your system, you can build by using cmake flag `-DMANDELBROT_KOKKOS_BUILD=ON`
 
-
-In order to download both mandelbrot_kokkos sources and kokkos itself, either use the following lines
-
-```bash
-git clone git@github.com:pkestene/mandelbrot_kokkos.git
-cd mandelbrot_kokkos
-git submodule init
-git submodule update
-```
-
-or do the same in one step (clone mandelbrot_kokkos and kokkos):
+In order to download `mandelbrot_kokkos_cmake` sources, use the following lines
 
 ```bash
-git clone --recursive git@github.com:pkestene/mandelbrot_kokkos.git
+git clone git@github.com:pkestene/mandelbrot_kokkos_cmake.git
 ```
 
 
-How to build ?
---------------
+## How to build ?
 
-1. Build with target device OpenMP
-
+### Build with target device OpenMP
 
 ```bash
-mkdir build_openmp
-cd build_openmp
-CXX=YOUR_COMPILER_HERE cmake -DKokkos_ENABLE_OPENMP=ON ..
+mkdir -p _build/openmp; cd _build/openmp
+cmake -DMANDELBROT_KOKKOS_BUILD=ON -DMANDELBROT_KOKKOS_BACKEND=OpenMP ../..
 make
 # then you can run the application
 ./src/mandelbrot_kokkos_openmp
 ```
 
-Optionnally you can enable HWLOC by passing -DKokkos_ENABLE_HWLOC=ON on cmake's command line (or in ccmake curse gui).
+Optionnally you can enable HWLOC by passing `-DKokkos_ENABLE_HWLOC=ON` on cmake's command line (or in ccmake curse gui).
 
-2. Build with target device CUDA
+### Build with target device CUDA
 
-You NEED to use nvcc_wrapper as the CXX compiler. nvcc_wrapper is located in kokkos sources, bin subdirectory. You can set the CXX env variable, like this
+Of course you NEED to have `nvcc` compiler available on your system. Just a few notices:
+
+- if you do not have already kokkos library available, it be compiled for your.
+- if you're compiling on a platform equipped with an Nvidia GPU, the GPU architecture version will be detected by kokkos cmake build system.
+- if you don't have a GPU, you can still build the code (but not run); you can specify the target architecture using flag `-DKokkos_ARCH`.
 
 ```bash
-mkdir build_cuda
-cd build_cuda
-export CXX=/path/to/kokkos/bin/nvcc_wrapper
-cmake -DKokkos_ENABLE_CUDA=ON -DKokkos_ARCH=Maxwell50 ..
+mkdir _build/cuda; cd _build/cuda
+cmake -DMANDELBROT_KOKKOS_BUILD=ON -DMANDELBROT_KOKKOS_BACKEND=Cuda -DKokkos_ENABLE_CUDA_LAMBDA=ON -DKokkos_ENABLE_HWLOC=ON ../..
 make
 # then you can run the application as before
 ./src/mandelbrot_kokkos_cuda
 ```
-
-Of course, you will need to adapt variable Kokkos_ARCH to your actual GPU architecture (use cuda sample device_query to probe the architecture).

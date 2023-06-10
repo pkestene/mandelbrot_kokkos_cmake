@@ -2,8 +2,6 @@
 #define KOKKOS_SHARED_H_
 
 #include <Kokkos_Core.hpp>
-#include <Kokkos_Parallel.hpp>
-#include <Kokkos_View.hpp>
 
 using Device = Kokkos::DefaultExecutionSpace;
 
@@ -39,6 +37,5 @@ int coord2index(int i, int j, int Nx, int Ny) {
   return j + Ny*i; // right layout
 #endif
 }
-
 
 #endif // KOKKOS_SHARED_H_
