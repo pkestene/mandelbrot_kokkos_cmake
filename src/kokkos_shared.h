@@ -3,14 +3,6 @@
 
 #include <Kokkos_Core.hpp>
 
-using Device = Kokkos::DefaultExecutionSpace;
-
-// Data array for image
-typedef Kokkos::View<unsigned char**, Device> DataArray;
-
-// host mirror
-typedef DataArray::HostMirror                 DataArrayHost;
-
 /**
  * Retrieve cartesian coordinate from index, using memory layout information.
  *
@@ -19,13 +11,15 @@ typedef DataArray::HostMirror                 DataArrayHost;
  * Prefer right layout for OpenMP execution space.
  */
 KOKKOS_INLINE_FUNCTION
-void index2coord(int index, int &i, int &j, int Nx, int Ny) {
+void
+index2coord(int index, int & i, int & j, int Nx, int Ny)
+{
 #ifdef KOKKOS_ENABLE_CUDA
   j = index / Nx;
-  i = index - j*Nx;
+  i = index - j * Nx;
 #else
   i = index / Ny;
-  j = index - i*Ny;
+  j = index - i * Ny;
 #endif
 }
 

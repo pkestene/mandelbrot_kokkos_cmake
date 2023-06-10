@@ -15,9 +15,7 @@ set (EXE_NAME_SRC
   constants.h
   CudaTimer.h
   write_ppm.h
-  write_ppm.cpp
   write_screen.h
-  write_screen.cpp
   kokkos_shared.h
   mandelbrot.h
   )
@@ -36,4 +34,3 @@ target_link_libraries(${EXE_NAME} kokkos)
 if (Kokkos_ENABLE_HWLOC)
   target_link_libraries(${EXE_NAME} hwloc)
 endif()
-  

@@ -8,13 +8,7 @@
 #include "constants.h"
 #include "kokkos_shared.h"
 #include "mandelbrot.h"
-
-#ifdef KOKKOS_ENABLE_CUDA
-#include "CudaTimer.h"
-#else // OpenMP
-#include "OpenMPTimer.h"
-#endif
-
+#include "MyTimer.h"
 #include "write_screen.h"
 #include "write_ppm.h"
 
@@ -25,15 +19,20 @@ using namespace std;
 // ==================================================================
 // ==================================================================
 // ==================================================================
+template <typename ExecutionSpace>
 void
 compute_mandelbrot_set(int argc, char * argv[])
 {
 
-#ifdef KOKKOS_ENABLE_CUDA
-  CudaTimer timer;
-#else
-  OpenMPTimer timer;
-#endif
+  using Timer_t = typename MyTimer<ExecutionSpace>::Timer;
+  Timer_t timer;
+
+  // Data array for mandelbrot image
+  using DataArray = Kokkos::View<unsigned char **, ExecutionSpace>;
+
+  // host mirror
+  using DataArrayHost = typename DataArray::HostMirror;
+
 
   int default_size = 8192;
   if (argc > 1)
@@ -53,10 +52,11 @@ compute_mandelbrot_set(int argc, char * argv[])
   timer.start();
 
   {
-    MandelbrotFunctor functor(image, constants);
-    using range2d_t = Kokkos::MDRangePolicy<Kokkos::Rank<2>, Kokkos::IndexType<int>>;
+    MandelbrotFunctor<DataArray> functor(image, constants);
+    using range2d_t =
+      Kokkos::MDRangePolicy<ExecutionSpace, Kokkos::Rank<2>, Kokkos::IndexType<int>>;
     range2d_t range({ 0, 0 }, { constants.WIDTH, constants.HEIGHT });
-    Kokkos::parallel_for(range, functor);
+    Kokkos::parallel_for("MandelbrotFunctor", range, functor);
   }
 
   timer.stop();
@@ -66,7 +66,6 @@ compute_mandelbrot_set(int argc, char * argv[])
   // copy back results from device to host
   Kokkos::deep_copy(imageHost, image);
 
-
   write_screen(imageHost, constants);
 
   // save color ppm file
@@ -75,7 +74,9 @@ compute_mandelbrot_set(int argc, char * argv[])
     std::string filename("mandelbrot.ppm");
     save_ppm(imageHost, filename, constants);
   }
-  printf("Compute time: %lf seconds.\n", timer.elapsed());
+  printf("Compute time : %lf seconds (using Kokkos device %s).\n",
+         timer.elapsed(),
+         ExecutionSpace::name());
 
 } // compute_mandelbrot_set
 
@@ -111,7 +112,9 @@ main(int argc, char * argv[])
     std::cout << "##########################\n";
   }
 
-  compute_mandelbrot_set(argc, argv);
+  using ExecSpace = Kokkos::DefaultExecutionSpace;
+
+  compute_mandelbrot_set<ExecSpace>(argc, argv);
 
   Kokkos::finalize();
 
